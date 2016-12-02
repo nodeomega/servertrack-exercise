@@ -34,7 +34,7 @@ your other npm modules.
 flatten-packages is very important, I will explain that in the next section.
 
 2. Navigate the command prompt to the Project directory for this solution (It should be 
-<what your projects path is>\ActivityDataDemo\ActivityDataDemo\), and run this:
+<what your projects path is>\ServerTrack\ServerTrack\), and run this:
 > npm install
 - This will install the node modules for this project in a folder marked node_modules.  
 -- This folder should not be checked into TFS, but instead npm install should be run on each 
