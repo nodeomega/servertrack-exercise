@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
+﻿using System.Web.Http;
 
 namespace ServerTrack
 {
@@ -14,10 +11,12 @@ namespace ServerTrack
             // Web API routes
             config.MapHttpAttributeRoutes();
 
+            config.Routes.MapHttpRoute("DefaultApiWithAction", "api/{controller}/{action}");
+
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
+                name: "DefaultApiWithID",
                 routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+                defaults: null
             );
         }
     }

@@ -3,29 +3,71 @@
 }
 
 <div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <h1>ServerTrack</h1>
+    <p>Test Demo Exercise.</p>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+<div class="row" data-ng-app="serverTrack" data-ng-controller="loadRecordController">
+    <input data-ng-init="Initialize();" type="hidden"/>
+
+    <div style="border: solid 1px black;">
+        <h2>Enter New Load Data</h2>
+        <div>
+            <label>Server Name: </label>
+            <input data-ng-model="newLoadEntry.serverName" type="text"/>
+        </div>
+        <div>
+            <label>CPU Load: </label>
+            <input data-ng-model="newLoadEntry.cpuLoad" type="text"/>
+        </div>
+        <div>
+            <label>RAM Load: </label>
+            <input data-ng-model="newLoadEntry.ramLoad" type="text"/>
+        </div>
+        <div>
+            <button data-ng-click="AddNewLoad()"><span class="fa fa-2x fa-pencil"></span> Add Entry</button>
+        </div>
+        <div data-ng-show="addingLoadData">
+            <img src="~/Images/Anim/ajax-loader-blue-small-circle-ball.gif" alt="processing" data-ng-cloak/> Adding...
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+
+    <div>
+        <label>Search Server Name: </label>
+        <input data-ng-model="serverNameSearch" data-ng-blur="SearchServerInfo();" type="text"/>
+        <img src="~/Images/Anim/ajax-loader-blue-small-circle-ball.gif" data-ng-show="listingIsLoading" alt="loading" data-ng-cloak/>
     </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    <div>
+        <button data-ng-click="SwitchToHourReport()" data-ng-style="hourStyle"><span class="fa fa-2x fa-clock-o"></span> Last 60 Minutes</button> <button data-ng-click="SwitchToDayReport()" data-ng-style="dayStyle"><span class="fa fa-2x fa-calendar-o"></span> Last 24 Hours</button>
     </div>
+
+
+    <table class="table-standard" data-ng-cloak>
+        <thead>
+        <tr>
+            <th data-ng-bind="reportTypeUnit"></th>
+            <th>CPU Load</th>
+            <th>RAM Load</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        </tfoot>
+        <tbody>
+        <tr data-ng-repeat="record in recordAverages">
+            <td data-ng-bind="record.TimeKey"></td>
+            <td data-ng-bind="record.CpuLoad"></td>
+            <td data-ng-bind="record.RamLoad"></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
+
+@section scripts
+    {
+    <script src="~/Scripts/outscript.js"></script>
+}
