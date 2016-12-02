@@ -230,6 +230,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="gulpfile.js" />
     <Content Include="Images\Anim\ajax-loader-blue-small-circle-ball.gif" />
+    <None Include="README" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js">
       <DependentUpon>angular-animate.js</DependentUpon>

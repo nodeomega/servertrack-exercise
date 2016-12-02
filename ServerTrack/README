@@ -1,0 +1,104 @@
+﻿ServerTrack - Readme
+
+* Prerequisites
+** Gulp
+
+This project uses Gulp as a task manager to handle some of the build functions.
+
+*** Setup
+
+You will need to have node.js installed on your build system in order to fully compile this project.
+
+**** Installation
+
+1. Navigate to https://nodejs.org/en/ and download the installer.
+2. Run the installer and follow the prompts.
+
+**** Setting up Gulp
+
+Once Node.js has been installed, you will need to set up the NPM commands.
+
+1. Open a command prompt window and run the following commands (without the >)
+
+> npm install -g gulp
+> npm install -g bower
+> npm install -g typescript
+> npm install -g flatten-packages
+
+I have Bower here as I think a couple components of this project may need that, but it doesn't hurt 
+to install it.
+
+Typescript is used extensively in this project and should be installed at the global level with 
+your other npm modules.
+
+flatten-packages is very important, I will explain that in the next section.
+
+2. Navigate the command prompt to the Project directory for this solution (It should be 
+<what your projects path is>\ActivityDataDemo\ActivityDataDemo\), and run this:
+> npm install
+- This will install the node modules for this project in a folder marked node_modules.  
+-- This folder should not be checked into TFS, but instead npm install should be run on each 
+   system that builds this project.
+
+*** Using npm
+
+There may be occassions you need to install a new npm module for this project specifically.  In order to 
+do so:
+
+1. Open a command prompt and navigate to the project directory (where the .csproj file will be)
+2. Install the module by typing
+> npm install <module name> --save-dev
+
+- --save-dev will allow other developers who retrieve local files to install the npm modules to their 
+  systems by typing > npm install < in the project directory (It should be 
+<what your projects path is>\ServerTrack\ServerTrack\ in this case)
+
+3. Ensure that the modules are referenced in the package.json and gulpfile.js files.
+- There are several modules already referenced in these two files.  Refer to these as examples as to what 
+  format further modules should be added.
+
+*** gulpfile.js
+
+1. The top of the file will have a /// <binding BeforeBuild='task1, task2, taskEtc'>.  These tasks are run before 
+the .NET portion of the build process in the order specified (comma-delimited).
+- There are also tasks that can be run after build, on clean, and on project open.  It's best to use the Task Runner 
+  Explorer window in Visual Studio to do this, however.  As of the time of this readme's last update, I have not 
+  used the binding syntax to set that.
+
+2. Here's an example :
+gulp.task('less', function () {
+    return gulp.src('./Content/**/*.less')
+        .pipe(sourcemaps.init())
+    .pipe(plumber())
+      .pipe(less({
+          paths: [path.join(__dirname, 'less', 'includes')]
+      }))
+        .pipe(sourcemaps.write('.'))
+      .pipe(gulp.dest('./content/'));
+});
+
+- In this case, this task will find all .less files under the Content directory and all of its subdirectories, and 
+  will compile all .less into their appropriate .css files.  It will also generate the .map files that will allow 
+  debuggers to map the CSS files to their source .less files.  The .map and .css files are saved to the /Content
+  directory.
+
+*** package.json
+
+This file contains the package dependencies for the node.js modules.  As they are installed via the command prompt, 
+they are typically added automatically to this file.  Generally you shouldn't have to touch this file at all.
+
+** Flatten Packages
+
+This package is extremely important, as there is an issue with Node.js modules using nested dependencies 
+which will go on forever beyond the Windows recommended 255-character path limit.  This will also affect 
+your ability to zip files or use TFS if you do not run Flatten Packages every time you install a new 
+npm module for this project.
+
+1. Navigate your command prompt to the project directory 
+(usually <what your projects path is>\ServerTrack\ServerTrack\)
+2. Type > flatten-packages
+
+This will flatten the packages and unnest most if not all dependencies in the node_modules folder in the 
+project, getting away from the file path length limit.
+
+(JR) I am currently seeking a way to automate the flattening in the build process.
